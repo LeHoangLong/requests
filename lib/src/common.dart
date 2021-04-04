@@ -6,18 +6,23 @@ import 'package:crypto/crypto.dart';
 class Common {
   const Common();
 
-  static storageSet(String key, String value) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  static Future<void> storageSet(String key, String value) async {
+    var sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setString(key, value);
   }
 
-  static storageGet(String key) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  static Future<void> storageRemove(String key) async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.remove(key);
+  }
+
+  static Future<String?> storageGet(String key) async {
+    var sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString(key);
   }
 
   static bool equalsIgnoreCase(String string1, String string2) {
-    return string1?.toLowerCase() == string2?.toLowerCase();
+    return string1.toLowerCase() == string2.toLowerCase();
   }
 
   static String toJson(dynamic object) {
@@ -26,7 +31,7 @@ class Common {
   }
 
   static dynamic fromJson(String jsonString) {
-    if (jsonString == null){
+    if (jsonString == null) {
       return null;
     }
     return json.decode(jsonString);
@@ -36,7 +41,7 @@ class Common {
     return map.keys.any((x) => equalsIgnoreCase(x, key));
   }
 
-  static String toHexString(List data) {
+  static String toHexString(List<int> data) {
     return HEX.encode(data);
   }
 
@@ -59,7 +64,7 @@ class Common {
   }
 
   static List<String> split(String string, String separator, {int max = 0}) {
-    var result = List<String>();
+    var result = <String>[];
 
     if (separator.isEmpty) {
       result.add(string);
