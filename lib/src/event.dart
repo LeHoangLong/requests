@@ -10,9 +10,8 @@ class Event {
   }
 
   void dispose() {
-    if (_streamController != null) {
-      _streamController?.close();
-    }
+    _streamController?.close();
+    _streamController = null;
   }
 
   void listen(void Function(dynamic event) callback) {

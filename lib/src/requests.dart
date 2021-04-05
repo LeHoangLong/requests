@@ -35,7 +35,7 @@ class Response {
   void throwForStatus() {
     if (!success) {
       throw HTTPException(
-          'Invalid HTTP status code $statusCode for url ${url}', this);
+          'Invalid HTTP status code $statusCode for url $url', this);
     }
   }
 
@@ -69,7 +69,7 @@ class Requests {
   static const int DEFAULT_TIMEOUT_SECONDS = 10;
   static const RequestBodyEncoding DEFAULT_BODY_ENCODING =
       RequestBodyEncoding.FormURLEncoded;
-  static Set _cookiesKeysToIgnore = Set.from([
+  static final _cookiesKeysToIgnore = <String>{
     'samesite',
     'path',
     'domain',
@@ -77,10 +77,10 @@ class Requests {
     'expires',
     'secure',
     'httponly'
-  ]);
+  };
 
   static Map<String, String> extractResponseCookies(responseHeaders) {
-    Map<String, String> cookies = {};
+    var cookies = <String, String>{};
     for (var key in responseHeaders.keys) {
       if (Common.equalsIgnoreCase(key, 'set-cookie')) {
         String cookie = responseHeaders[key];
@@ -113,11 +113,9 @@ class Requests {
     try {
       var hostnameHash = Common.hashStringSHA256(hostname);
       var cookiesJson = await Common.storageGet('cookies-$hostnameHash');
-      if (cookiesJson != null) {
-        var cookies = Common.fromJson(cookiesJson);
-        if (cookies != null) {
-          return Map.from(cookies);
-        }
+      var cookies = Common.fromJson(cookiesJson);
+      if (cookies != null) {
+        return Map.from(cookies);
       }
     } catch (e) {
       log.shout(
@@ -377,8 +375,7 @@ class Requests {
           break;
       }
 
-      if (contentTypeHeader != null &&
-          !Common.hasKeyIgnoreCase(headers, 'content-type')) {
+      if (!Common.hasKeyIgnoreCase(headers, 'content-type')) {
         headers['content-type'] = contentTypeHeader;
       }
     }

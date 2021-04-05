@@ -231,6 +231,7 @@ void main() {
 
     test('from json', () async {
       expect(Common.fromJson('{"a":1}'), {"a": 1});
+      expect(Common.fromJson(null), null);
     });
   });
 }
